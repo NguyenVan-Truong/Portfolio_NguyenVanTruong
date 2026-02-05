@@ -25,7 +25,6 @@ const Header = () => {
     { name: t("about"), href: "#about" },
     { name: t("skills"), href: "#skills" },
     { name: t("experience"), href: "#experience" },
-    { name: t("activities"), href: "#activities" },
     { name: t("contact"), href: "#contact" },
   ];
 
@@ -33,11 +32,19 @@ const Header = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
         isScrolled
-          ? "bg-[var(--card-bg)]/90 backdrop-blur-md shadow-lg border-[var(--card-border)]"
-          : "bg-[var(--card-bg)]/60 backdrop-blur-md border-[var(--card-border)]"
+          ? "bg-[var(--background)] shadow-lg border-[var(--card-border)]"
+          : "bg-[var(--background)] border-[var(--card-border)]"
       }`}
     >
-      <nav className="container-custom px-6 py-4">
+      {/* Mobile overlay to allow closing menu by tapping outside */}
+      {isMobileMenuOpen && (
+        <div
+          className="md:hidden fixed inset-0 bg-black/80 z-40"
+          onClick={() => setIsMobileMenuOpen(false)}
+        ></div>
+      )}
+
+      <nav className="relative z-50 container-custom px-6 py-4">
         <div className="flex items-center justify-between">
           {/* Desktop Navigation */}
           <ul className="hidden md:flex items-center gap-8">
@@ -142,7 +149,7 @@ const Header = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <ul className="md:hidden mt-4 space-y-4 pb-4">
+          <ul className="md:hidden mt-4 space-y-4 pb-4 bg-[var(--background)] border border-[var(--card-border)] rounded-xl p-4 shadow-2xl">
             {navItems.map((item) => (
               <li key={item.name}>
                 <Link
