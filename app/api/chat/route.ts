@@ -1,0 +1,65 @@
+import { GoogleGenerativeAI } from '@google/generative-ai';
+import { NextResponse } from 'next/server';
+
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+
+export async function GET() {
+  try {
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json({ error: 'Missing API Key' }, { status: 500 });
+    }
+    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+    return NextResponse.json({ message: 'Use POST to chat' });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function POST(req: Request) {
+  try {
+    const { messages } = await req.json();
+
+    if (!process.env.GEMINI_API_KEY) {
+      return NextResponse.json(
+        { error: 'Bạn chưa cấu hình API Key cho Gemini. Vui lòng thêm API Key vào file .env.' },
+        { status: 500 }
+      );
+    }
+
+    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+
+    const systemPrompt = `
+      Bạn là một trợ lý ảo thông minh và thân thiện của Nguyễn Văn Trường (anh Trường). 
+      Trường là một Frontend Developer với 1 năm kinh nghiệm. 
+      Bạn hãy trả lời các câu hỏi của người dùng về Trường dựa trên các thông tin sau:
+      - Tên: Nguyễn Văn Trường.
+      - Vai trò: Frontend Developer.
+      - Kinh nghiệm: 1 năm (từ 6/2023 - 6/2024 tại FWA Management).
+      - Kỹ năng: HTML, CSS, TypeScript, React.js, Next.js, TailwindCSS, Bootstrap, Sass, Git, Figma, Canva.
+      - Dự án đã làm: Typeshop, Boomi, Monoless TK 2020, Ngôn Ngữ, Topshop. Các dự án này thường sử dụng React.js, Next.js, Tailwind CSS và tích hợp API.
+      - Mục tiêu: Tìm kiếm cơ hội Junior hoặc Mid-Level Developer.
+      - Tính cách: Nhiệt huyết, đam mê tạo ra trải nghiệm người dùng tuyệt vời.
+      - Ngôn ngữ: Bạn có thể trả lời bằng tiếng Việt hoặc tiếng Anh tùy theo ngôn ngữ người dùng sử dụng.
+
+      Lưu ý:
+      - Nếu người dùng hỏi các vấn đề không liên quan đến Trường hoặc lập trình, hãy trả lời một cách lịch sự rằng bạn được thiết kế để hỗ trợ thông tin về Trường và các dự án của anh ấy.
+      - Trả lời ngắn gọn, súc tích và chuyên nghiệp nhưng vẫn thân thiện.
+      - Sử dụng emoji để làm cuộc trò chuyện sinh động hơn giống như trong ảnh tham khảo (ví dụ: ✨, 🚀, 😊).
+    `;
+
+    const lastMessage = messages[messages.length - 1].content;
+    
+    const result = await model.generateContent([
+      { text: systemPrompt },
+      { text: `User asks: ${lastMessage}` }
+    ]);
+    
+    const response = await result.response;
+    const text = response.text();
+
+    return NextResponse.json({ content: text });
+  } catch (error: any) {
+    console.error('Chat API Error:', error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
