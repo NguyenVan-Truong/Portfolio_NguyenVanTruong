@@ -91,13 +91,19 @@ const Header = () => {
             {/* Language Toggle Button */}
             <button
               onClick={toggleLanguage}
-              className="px-3 py-2 rounded-lg bg-[var(--card-bg)] border border-[var(--card-border)] hover:border-[var(--accent)] transition-all duration-300 hover:scale-110 font-medium text-sm text-[var(--foreground)]"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--card-bg)] border border-[var(--card-border)] hover:border-[var(--accent)] transition-all duration-300 hover:scale-105 font-medium text-sm text-[var(--foreground)]"
               aria-label="Toggle language"
             >
               {language === 'vi' ? (
-                <img src="https://flagcdn.com/w40/us.png" alt="English" className="w-6 h-auto inline-block rounded-sm" />
+                <>
+                  <img src="https://flagcdn.com/w40/us.png" alt="English" className="w-5 h-auto rounded-sm group-hover:scale-110 transition-transform" />
+                  <span className="hidden sm:inline">EN</span>
+                </>
               ) : (
-                <img src="https://flagcdn.com/w40/vn.png" alt="Tiếng Việt" className="w-6 h-auto inline-block rounded-sm" />
+                <>
+                  <img src="https://flagcdn.com/w40/vn.png" alt="Tiếng Việt" className="w-5 h-auto rounded-sm group-hover:scale-110 transition-transform" />
+                  <span className="hidden sm:inline">VI</span>
+                </>
               )}
             </button>
 
