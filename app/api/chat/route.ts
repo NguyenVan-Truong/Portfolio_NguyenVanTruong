@@ -2,10 +2,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { NextResponse } from "next/server";
 
 const createModel = () => {
-  const apiKey = "AIzaSyCVCwrthBlPqOJwK5cworfz7Snz7qf4VHw"; // process.env.GEMINI_API_KEY;
+  // Prefer API_KEY to align with Vercel env variable setup; fall back to GEMINI_API_KEY for compatibility
+  const apiKey = process.env.API_KEY || process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    throw new Error("Bạn chưa cấu hình biến môi trường GEMINI_API_KEY.");
+    throw new Error("Thiếu biến môi trường API_KEY (hoặc GEMINI_API_KEY).");
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
