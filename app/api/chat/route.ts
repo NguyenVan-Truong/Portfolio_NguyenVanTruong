@@ -1,14 +1,20 @@
 import { GoogleGenerativeAI } from '@google/generative-ai';
 import { NextResponse } from 'next/server';
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
+const createModel = () => {
+  const apiKey = process.env.GEMINI_API_KEY;
+
+  if (!apiKey) {
+    throw new Error('Bạn chưa cấu hình biến môi trường GEMINI_API_KEY.');
+  }
+
+  const genAI = new GoogleGenerativeAI(apiKey);
+  return genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+};
 
 export async function GET() {
   try {
-    if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json({ error: 'Missing API Key' }, { status: 500 });
-    }
-    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+    createModel();
     return NextResponse.json({ message: 'Use POST to chat' });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -19,14 +25,7 @@ export async function POST(req: Request) {
   try {
     const { messages } = await req.json();
 
-    if (!process.env.GEMINI_API_KEY) {
-      return NextResponse.json(
-        { error: 'Bạn chưa cấu hình API Key cho Gemini. Vui lòng thêm API Key vào file .env.' },
-        { status: 500 }
-      );
-    }
-
-    const model = genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+    const model = createModel();
 
     const systemPrompt = `
       Bạn là một trợ lý ảo thông minh và thân thiện của Nguyễn Văn Trường (anh Trường). 
