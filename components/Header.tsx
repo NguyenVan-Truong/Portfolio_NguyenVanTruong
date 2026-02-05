@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useLanguage } from '@/contexts/LanguageContext';
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -16,25 +16,25 @@ const Header = () => {
       setIsScrolled(window.scrollY > 50);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const navItems = [
-    { name: t('home'), href: '#home' },
-    { name: t('about'), href: '#about' },
-    { name: t('skills'), href: '#skills' },
-    { name: t('experience'), href: '#experience' },
-    { name: t('activities'), href: '#activities' },
-    { name: t('contact'), href: '#contact' },
+    { name: t("home"), href: "#home" },
+    { name: t("about"), href: "#about" },
+    { name: t("skills"), href: "#skills" },
+    { name: t("experience"), href: "#experience" },
+    { name: t("activities"), href: "#activities" },
+    { name: t("contact"), href: "#contact" },
   ];
 
   return (
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 border-b ${
         isScrolled
-          ? 'bg-[var(--card-bg)] backdrop-blur-md shadow-lg border-[var(--card-border)]'
-          : 'bg-transparent border-transparent'
+          ? "bg-[var(--card-bg)]/90 backdrop-blur-md shadow-lg border-[var(--card-border)]"
+          : "bg-[var(--card-bg)]/60 backdrop-blur-md border-[var(--card-border)]"
       }`}
     >
       <nav className="container-custom px-6 py-4">
@@ -61,7 +61,7 @@ const Header = () => {
               className="p-2 rounded-lg bg-[var(--card-bg)] border border-[var(--card-border)] hover:border-[var(--accent)] transition-all duration-300 hover:scale-110"
               aria-label="Toggle theme"
             >
-              {theme === 'dark' ? (
+              {theme === "dark" ? (
                 <svg
                   className="w-5 h-5 text-yellow-400"
                   fill="none"
@@ -94,14 +94,22 @@ const Header = () => {
               className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[var(--card-bg)] border border-[var(--card-border)] hover:border-[var(--accent)] transition-all duration-300 hover:scale-105 font-medium text-sm text-[var(--foreground)]"
               aria-label="Toggle language"
             >
-              {language === 'vi' ? (
+              {language === "vi" ? (
                 <>
-                  <img src="https://flagcdn.com/w40/us.png" alt="English" className="w-5 h-auto rounded-sm group-hover:scale-110 transition-transform" />
+                  <img
+                    src="https://flagcdn.com/w40/us.png"
+                    alt="English"
+                    className="w-5 h-auto rounded-sm group-hover:scale-110 transition-transform"
+                  />
                   <span className="hidden sm:inline">EN</span>
                 </>
               ) : (
                 <>
-                  <img src="https://flagcdn.com/w40/vn.png" alt="Tiếng Việt" className="w-5 h-auto rounded-sm group-hover:scale-110 transition-transform" />
+                  <img
+                    src="https://flagcdn.com/w40/vn.png"
+                    alt="Tiếng Việt"
+                    className="w-5 h-auto rounded-sm group-hover:scale-110 transition-transform"
+                  />
                   <span className="hidden sm:inline">VI</span>
                 </>
               )}
@@ -154,4 +162,3 @@ const Header = () => {
 };
 
 export default Header;
-
