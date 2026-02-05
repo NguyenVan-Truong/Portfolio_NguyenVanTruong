@@ -1,21 +1,21 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
-import { NextResponse } from 'next/server';
+import { GoogleGenerativeAI } from "@google/generative-ai";
+import { NextResponse } from "next/server";
 
 const createModel = () => {
-  const apiKey = process.env.GEMINI_API_KEY;
+  const apiKey = "AIzaSyCVCwrthBlPqOJwK5cworfz7Snz7qf4VHw"; // process.env.GEMINI_API_KEY;
 
   if (!apiKey) {
-    throw new Error('Bạn chưa cấu hình biến môi trường GEMINI_API_KEY.');
+    throw new Error("Bạn chưa cấu hình biến môi trường GEMINI_API_KEY.");
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
-  return genAI.getGenerativeModel({ model: 'gemini-flash-latest' });
+  return genAI.getGenerativeModel({ model: "gemini-flash-latest" });
 };
 
 export async function GET() {
   try {
     createModel();
-    return NextResponse.json({ message: 'Use POST to chat' });
+    return NextResponse.json({ message: "Use POST to chat" });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
@@ -45,18 +45,18 @@ export async function POST(req: Request) {
     `;
 
     const lastMessage = messages[messages.length - 1].content;
-    
+
     const result = await model.generateContent([
       { text: systemPrompt },
-      { text: `User asks: ${lastMessage}` }
+      { text: `User asks: ${lastMessage}` },
     ]);
-    
+
     const response = await result.response;
     const text = response.text();
 
     return NextResponse.json({ content: text });
   } catch (error: any) {
-    console.error('Chat API Error:', error);
+    console.error("Chat API Error:", error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
