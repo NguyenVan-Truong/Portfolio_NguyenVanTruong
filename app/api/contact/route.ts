@@ -8,6 +8,7 @@ interface ContactPayload {
   email?: string;
   subject?: string;
   message?: string;
+  language?: "vi" | "en";
 }
 
 const requiredEnv = [
@@ -43,12 +44,35 @@ export async function POST(req: Request) {
       email = "",
       subject = "",
       message = "",
+      language = "en",
     } = (await req.json()) as ContactPayload;
 
     const trimmedName = name.trim();
     const trimmedEmail = email.trim();
     const trimmedSubject = subject.trim();
     const trimmedMessage = message.trim();
+    const resolvedLanguage = language === "vi" ? "vi" : "en";
+
+    const labels =
+      resolvedLanguage === "vi"
+        ? {
+            heading: "Thong tin lien he moi",
+            name: "Ho va ten",
+            email: "Email",
+            subject: "Tieu de",
+            message: "Noi dung",
+            footer: "Email nay duoc gui tu form lien he portfolio",
+            subject_prefix: "Lien he tu",
+          }
+        : {
+            heading: "New Contact Form Submission",
+            name: "Name",
+            email: "Email",
+            subject: "Subject",
+            message: "Message",
+            footer: "This email was sent from your portfolio contact form",
+            subject_prefix: "Portfolio contact from",
+          };
 
     if (trimmedName.length < 2) {
       return NextResponse.json({ error: "Name is required" }, { status: 400 });
@@ -83,26 +107,26 @@ export async function POST(req: Request) {
         `Portfolio Mailer <${process.env.SMTP_USER}>`,
       to: toAddress,
       replyTo: trimmedEmail,
-      subject: trimmedSubject,
-      text: `Name: ${trimmedName}\nEmail: ${trimmedEmail}\nSubject: ${trimmedSubject}\n\nMessage:\n${trimmedMessage}`,
+      subject: `${labels.subject_prefix} ${trimmedName} - ${trimmedSubject}`,
+      text: `${labels.name}: ${trimmedName}\n${labels.email}: ${trimmedEmail}\n${labels.subject}: ${trimmedSubject}\n\n${labels.message}:\n${trimmedMessage}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; background-color: #f5f5f5;">
           <div style="background-color: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-            <h2 style="color: #333; border-bottom: 3px solid #4CAF50; padding-bottom: 10px;">New Contact Form Submission</h2>
+            <h2 style="color: #333; border-bottom: 3px solid #4CAF50; padding-bottom: 10px;">${labels.heading}</h2>
             
             <div style="margin: 20px 0;">
-              <p style="margin: 10px 0;"><strong style="color: #666;">Name:</strong> <span style="color: #333;">${trimmedName}</span></p>
-              <p style="margin: 10px 0;"><strong style="color: #666;">Email:</strong> <a href="mailto:${trimmedEmail}" style="color: #4CAF50; text-decoration: none;">${trimmedEmail}</a></p>
-              <p style="margin: 10px 0;"><strong style="color: #666;">Subject:</strong> <span style="color: #333;">${trimmedSubject}</span></p>
+              <p style="margin: 10px 0;"><strong style="color: #666;">${labels.name}:</strong> <span style="color: #333;">${trimmedName}</span></p>
+              <p style="margin: 10px 0;"><strong style="color: #666;">${labels.email}:</strong> <a href="mailto:${trimmedEmail}" style="color: #4CAF50; text-decoration: none;">${trimmedEmail}</a></p>
+              <p style="margin: 10px 0;"><strong style="color: #666;">${labels.subject}:</strong> <span style="color: #333;">${trimmedSubject}</span></p>
             </div>
             
             <div style="margin-top: 20px; padding: 20px; background-color: #f9f9f9; border-left: 4px solid #4CAF50; border-radius: 5px;">
-              <p style="margin: 0 0 10px 0;"><strong style="color: #666;">Message:</strong></p>
+              <p style="margin: 0 0 10px 0;"><strong style="color: #666;">${labels.message}:</strong></p>
               <p style="color: #333; line-height: 1.6; white-space: pre-wrap;">${trimmedMessage}</p>
             </div>
             
             <div style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee; text-align: center; color: #999; font-size: 12px;">
-              <p>This email was sent from your portfolio contact form</p>
+              <p>${labels.footer}</p>
             </div>
           </div>
         </div>

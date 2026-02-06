@@ -56,6 +56,32 @@ body {
   overflow-x: hidden;
 }
 
+.contact-input {
+  background: rgba(17, 17, 27, 0.8);
+  color: var(--foreground);
+}
+
+.contact-input::placeholder {
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+[data-theme="light"] .contact-input {
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  border-color: rgba(148, 163, 184, 0.5);
+  box-shadow: 0 12px 24px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .contact-input::placeholder {
+  color: #64748b;
+  opacity: 0.8;
+}
+
+.font-display {
+  font-family: var(--font-display), "Space Grotesk", sans-serif;
+}
+
 /* Background gradient effect */
 body::before {
   content: "";
@@ -164,6 +190,30 @@ body::before {
   }
 }
 
+@keyframes floatBadge {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes glowPulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 0 rgba(16, 185, 129, 0.35),
+      0 0 18px rgba(16, 185, 129, 0.2);
+  }
+  50% {
+    box-shadow:
+      0 0 0 6px rgba(16, 185, 129, 0),
+      0 0 28px rgba(16, 185, 129, 0.35);
+  }
+}
+
 @keyframes shimmer {
   0% {
     background-position: -1000px 0;
@@ -179,6 +229,15 @@ body::before {
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+.animate-badge-float {
+  animation: floatBadge 2.6s ease-in-out infinite;
+  will-change: transform;
+}
+
+.animate-glow {
+  animation: glowPulse 3.6s ease-in-out infinite;
 }
 
 /* Responsive typography */
