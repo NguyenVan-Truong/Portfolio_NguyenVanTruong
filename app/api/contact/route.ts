@@ -56,13 +56,13 @@ export async function POST(req: Request) {
     const labels =
       resolvedLanguage === "vi"
         ? {
-            heading: "Thong tin lien he moi",
-            name: "Ho va ten",
+            heading: "Thông tin liên hệ mới",
+            name: "Họ và tên",
             email: "Email",
-            subject: "Tieu de",
-            message: "Noi dung",
-            footer: "Email nay duoc gui tu form lien he portfolio",
-            subject_prefix: "Lien he tu",
+            subject: "Tiêu đề",
+            message: "Nội dung",
+            footer: "Email này được gửi từ form liên hệ portfolio",
+            subject_prefix: "Liên hệ từ",
           }
         : {
             heading: "New Contact Form Submission",
