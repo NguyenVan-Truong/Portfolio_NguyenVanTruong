@@ -367,18 +367,16 @@ const Contact = () => {
                       </Alert>
                     )}
 
-                    <Button
+                    <button
                       type="submit"
-                      loading={status === "loading"}
-                      leftSection={<FaPaperPlane />}
-                      classNames={{
-                        root: "w-full py-6 px-8 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold text-lg hover:shadow-[0_0_30px_rgba(14,165,233,0.35)] hover:scale-[1.01] transition-all",
-                        label: "text-lg font-bold",
-                        section: "text-lg",
-                      }}
+                      disabled={status === "loading"}
+                      className="w-full py-6 px-8 rounded-2xl bg-gradient-to-r from-[var(--primary)] to-[var(--accent)] text-white font-bold text-lg hover:shadow-[0_0_30px_rgba(14,165,233,0.35)] hover:scale-[1.01] transition-all disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      {status === "loading" ? t.sending : t.send_btn}
-                    </Button>
+                      <span className="inline-flex items-center justify-center gap-3">
+                        <FaPaperPlane className="text-lg" />
+                        {status === "loading" ? t.sending : t.send_btn}
+                      </span>
+                    </button>
                   </Stack>
                 </form>
               </Stack>
